@@ -1,7 +1,7 @@
 {
   "name": "friend-finder",
   "version": "1.0.0",
-  "description": "",
+  "description": "Restaurant Reserveation Applicatin Using Node Js and Express.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/eidmuha/Friend-Finder.git"
   },
-  "author": "",
+  "author": "Eid",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/eidmuha/Friend-Finder/issues"
