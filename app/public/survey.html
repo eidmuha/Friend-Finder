@@ -22,10 +22,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 
-
-<!-- <script src="js/logic.js"></script> -->
-
-    
 <title>Survey</title>
   
 </head>
@@ -49,10 +45,10 @@
                 
                 <h3><strong>About You</strong></h3>
                 <label for="name">Name (Required)</label>
-                <input type="text" id="name" class="form-control" required="true">
+                <input type="text" id="name" placeholder="name" class="form-control" required="true">
             
                 <label for="photo">Link to Photo Image (Required)</label>
-                <input type="text" id="photo" class="form-control" required="true">
+                <input type="url" id="photo" class="form-control" placeholder="https://example.com" pattern="https://.*" required="true">
             
                 <hr>
             
@@ -189,15 +185,15 @@
             
                   <!-- Modal content-->
                   <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header text-center text-success">
                             <h5 class="modal-title" id="exampleModalLabel">Best Match</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-center">
                       <h2 id="match-name"></h2>
-                      <img id="match-img" src="" alt="">
+                      <img id="match-img" src="" alt="" width="300">
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Close</button>
@@ -250,15 +246,12 @@
         ]
       };
       
+      var finder;
+      var match = []
       // AJAX post the data to the friends API.
       $.post("/api/friends", userData, function(data) {
-            console.log(data)          
-          // Grab the result from the AJAX post so that the best match's name and photo are displayed.
-          $("#match-name").text(data.name);
-          $("#match-img").attr("src", data.photo);
-        
-          // Show the modal with the best match
-          $("#results-modal").modal("toggle");
+        // safe the finder details for later use
+        finder = data.scores;
 
         // Clear the form when submitting
         $("#name").val("");
@@ -274,6 +267,42 @@
         $("#q9").val("");
         $("#q10").val("");
       })
+
+      // call the friends api and copare their values
+      $.ajax({ url: "/api/friends", method: "GET" })
+      .then(function(friends) {
+
+        for (var i = 0; i < friends.length-1; i++) {  
+          //  add the elements of the two arrays
+          var diffArray = finder.map(function (num, j) {
+              return Math.abs(parseInt(num) - parseInt(friends[i].scores[j]));
+            });         
+            var diff = diffArray.reduce((accumulator, currentValue)=>{
+              return accumulator + currentValue;
+            }, 0);
+
+            // push it in temprorary array
+            match.push(diff)
+
+        }
+
+        // finds the best match 
+        var index = 0;
+        var value = match[0];
+        for (var i = 1; i < match.length; i++) {
+          if (match[i] < value) {
+            value = match[i];
+            index = i;
+          }
+        }
+
+          $("#match-name").text(friends[index].name);
+          $("#match-img").attr("src", friends[index].photo);
+        
+          // Show the modal with the best match
+          $("#results-modal").modal("toggle");
+
+      });
 
     } else {
       alert("Please fill out all fields before submitting!");

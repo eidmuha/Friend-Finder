@@ -16,14 +16,14 @@ module.exports = function(app) {
   // ---------------------------------------------------------------------------
 
   app.get("/survey", function(req, res) {
-      console.log("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+      // console.log("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
     res.sendFile(path.join(__dirname, "../public/survey.html"));
   });
 
 
   // If no matching route is found default to home
   app.get("*", function(req, res) {
-    console.log("?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>?????????????????????????")
+    // console.log("?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>?????????????????????????")
     res.sendFile(path.join(__dirname, "../public/home.html"));
   });
 };

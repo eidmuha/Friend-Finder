@@ -9,14 +9,15 @@ var express = require("express");
 //======================================================================
 // set our node js app as an express server
 var app = express();
+var bodyParser = require('body-parser');
 
 // set the port number
 var PORT = process.env.PORT || 8081;
 
 // Sets up the Express app to handle data parsing
-app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json())
-
 //======================================================================
 // ROUTES
 //======================================================================
